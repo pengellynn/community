@@ -1,0 +1,104 @@
+# ServerProperties
+server:
+  port: 8080
+  servlet:
+    context-path: /community
+
+spring:
+  # druid配置
+  datasource:
+    username: 
+    password: 
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/community?characterEncoding=utf-8&useSSL=false
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    filters: stat,wall,log4j
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+
+  # redis配置
+  redis:
+    host:      # Redis服务器地址
+    port: 6379            # Redis服务器端口
+    password:   # Redis服务器连接密码（默认为空）
+    database: 0           # Redis数据库索引（默认为0）
+    timeout: 5000ms       # 连接超时时间（毫秒）
+    jedis:
+      pool:
+        max-active: 8     # 连接池最大连接数（使用负值表示没有限制）
+        max-idle: 8       # 连接池最大空闲连接
+        min-idle: 0       # 连接池最小空闲连接
+        max-wait: -1ms    # 连接池最大阻塞时间（使用负值表示没有限制）
+
+  # Thymeleaf配置
+  thymeleaf:
+    cache: false
+
+  # MailProperties
+  mail:
+    host: smtp.qq.com
+    protocol: smtp
+    username: 
+    password: 
+    properties.mail.smtp.port: 465
+    properties.mail.smtp.ssl.enable: true
+    default-encoding: utf-8
+  kafka:
+    bootstrap-servers: 
+    consumer:
+      group-id: community-consumer-group
+      enable-auto-commit: true
+      auto-commit-interval: 3000ms
+  data:
+    elasticsearch:
+      cluster-name: docker-cluster
+      cluster-nodes: 
+
+  # QuartzProperties
+  quartz:
+    job-store-type: jdbc
+    scheduler-name: communityScheduler
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceId: AUTO
+          jobStore:
+            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            isClustered: true
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 5
+
+# mybatis配置
+mybatis:
+  #config-location: classpath:mybatis-config.xml
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    lazy-loading-enabled: true
+    map-underscore-to-camel-case: true
+    use-generated-keys: true
+
+# community
+community:
+  path:
+    domain: http://localhost:8080
+    upload: d:/projects/community/data/upload
+
+# caffeine
+caffeine:
+  posts:
+    max-size: 15
+    expire-seconds: 180
